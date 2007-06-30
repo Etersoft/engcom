@@ -1,6 +1,6 @@
 <?php
 // --------------------------------------------------------------------------
-// $Id: dictionary.html.php,v 1.2 2007/06/30 22:02:48 pv Exp $
+// $Id: dictionary.html.php,v 1.3 2007/06/30 22:11:37 pv Exp $
 // --------------------------------------------------------------------------
 defined( '_ACCESS' ) or die( 'Direct Access to this location is not allowed.' );
 
@@ -162,8 +162,24 @@ function editForm($row)
 <?php
 	if( $row->article != '' )
 	{
+		global $config_live_site,$dictionary_wiki;
+
+		// формируем меню (после раскраски, чтобы слова в меню не подсвечивались)
+		$dlnk = HTML_dictionary::refIndex("task=edit&word=$row->word");
+		$w_menu = '<ul style="padding-left: 5px;">';
+		$w_menu .="<li><a href=\"$dlnk\">Предложить</a></li>";
+		$w_menu .="<li><a href=\"$dwiki/$row->word\">Обсудить</a></li>";
+		$w_menu .= "</ul><hr style='padding-left: 10px; padding-right: 10px;' width='98%' align='center'><ul style='padding-left: 5px;'>";
+		$w_menu .="<li><a href=\"http://wikipedia.org/wiki/$row->word\">Wikipedia</a></li>";
+		$w_menu .="<li><a href=\"http://wiktionary.org/wiki/$row->word\">Wiktionary</a></li>";
+		$w_menu .="<li><a href=\"http://foldoc.org/?query=$row->word&action=Search\">FOLDOC</a></li>";
+		$w_menu .="<li><a href=\"http://www.onelook.com/cgi-bin/cgiwrap/bware/dofind.cgi?word=$row->word\">OneLook</a></li>";
+		$w_menu .= '</ul>';
+		$row->article = preg_replace("/\{MENU\}/",$w_menu, $row->article);
 ?>
-	<tr><td colspan='2' align='left'><h4>Оригинальная статья:</h4><?php echo $row->article; ?></td></tr>
+	<tr><td colspan='2' align='left'><h4>Оригинальная статья:</h4>
+			<p><?php echo $row->article; ?>
+		</td></tr>
 <?php
 	}
 ?>
