@@ -1,6 +1,6 @@
 <?php
 // --------------------------------------------------------------------------
-// $Id: dictionary.class.php,v 1.1 2007/06/30 22:01:33 pv Exp $
+// $Id: dictionary.class.php,v 1.2 2007/06/30 22:02:48 pv Exp $
 // --------------------------------------------------------------------------
 defined( '_ACCESS' ) or die( 'Direct Access to this location is not allowed.' );
 

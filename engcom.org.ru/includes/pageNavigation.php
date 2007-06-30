@@ -1,5 +1,5 @@
 <?php
-// $Id: pageNavigation.php,v 1.1 2007/06/30 22:01:33 pv Exp $
+// $Id: pageNavigation.php,v 1.2 2007/06/30 22:02:49 pv Exp $
 /**
 * Page Navigation code
 * @package Mambo Open Source
@@ -7,7 +7,7 @@
 * @ All rights reserved
 * @ Mambo Open Source is Free Software
 * @ Released under GNU/GPL License : http://www.gnu.org/copyleft/gpl.html
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 * ------------------------------------------------------------------------
 * modify by Pavel Vainerman pv@etersoft.ru
 * ------------------------------------------------------------------------
@@ -20,7 +20,7 @@ defined( '_ACCESS' ) or die( 'Direct Access to this location is not allowed.' );
 * @package MOS
 * @copyright 2000-2003 Miro International Pty Ltd
 * @license http://www.gnu.org/copyleft/gpl.html. GNU Public License
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 
 /**

@@ -9,7 +9,7 @@
 		exit();
 	}
 */
-	$filename = 'engcom.src.html';
+	$filename = 'EngCom.source.xml.html';
 	define( '_ACCESS', 1 );
 	require_once('configuration.php');
 	require_once('includes/database.php');

@@ -12,7 +12,7 @@ $andyr_signature='Mambo_4523_Paranoia_019';
 ?>
 <?php
 /**
-* @version $Id: database.php,v 1.1 2007/06/30 22:01:33 pv Exp $
+* @version $Id: database.php,v 1.2 2007/06/30 22:02:48 pv Exp $
 * @package Mambo
 * @subpackage Database
 * @copyright (C) 2000 - 2005 Miro International Pty Ltd

@@ -4,7 +4,7 @@
  * Copyright (c) 2004 Free Software Foundation, Inc. Licensed under GPL v.2.
  * Copyright (c) 2004 Pavel Vainerman
  * Author: Pavel Vainerman <pv@etersoft.ru>
- * $Id: index.php,v 1.1 2007/06/30 22:01:33 pv Exp $
+ * $Id: index.php,v 1.2 2007/06/30 22:02:48 pv Exp $
  * --------------------------------------------------------------------------
 */
 	define( '_ACCESS', 1 );

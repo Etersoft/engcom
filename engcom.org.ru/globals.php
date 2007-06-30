@@ -12,7 +12,7 @@ $andyr_signature='Mambo_4523_Paranoia_019';
 ?>
 <?php
 /**
-* @version $Id: globals.php,v 1.1 2007/06/30 22:01:32 pv Exp $
+* @version $Id: globals.php,v 1.2 2007/06/30 22:02:48 pv Exp $
 * @package Mambo
 * @copyright (C) 2000 - 2005 Miro International Pty Ltd
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL

@@ -1,7 +1,7 @@
 <?php
 
 	defined( '_ACCESS' ) or die( 'Direct Access to this location is not allowed.' );
-// $Id: miniMOS.php,v 1.1 2007/06/30 22:01:33 pv Exp $
+// $Id: miniMOS.php,v 1.2 2007/06/30 22:02:48 pv Exp $
 /**
 * Foundation classes
 * @package Mambo Open Source
@@ -9,7 +9,7 @@
 * @ All rights reserved
 * @ Mambo Open Source is Free Software
 * @ Released under GNU/GPL License : http://www.gnu.org/copyleft/gpl.html
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 * ------------------------------------------------------------------------
 * modify by Pavel Vainerman pv@etersoft.ru
 * ------------------------------------------------------------------------
