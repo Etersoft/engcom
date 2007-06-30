@@ -4,7 +4,7 @@
  * Copyright (c) 2004 Free Software Foundation, Inc. Licensed under GPL v.2.
  * Copyright (c) 2004 Pavel Vainerman
  * Author: Pavel Vainerman <pv@etersoft.ru>
- * $Id: index.php,v 1.2 2007/06/30 22:02:48 pv Exp $
+ * $Id: index.php,v 1.3 2007/06/30 22:15:20 pv Exp $
  * --------------------------------------------------------------------------
 */
 	define( '_ACCESS', 1 );
@@ -17,6 +17,7 @@
 	require_once('includes/dictionary.class.php');
 	require_once('includes/dictionary.php');
 	require_once('language/russian.php');
+	require_once('includes/phpmailer/class.phpmailer.php');
 	
 	$database 	= new database( $dbhost, $dbuser, $dbpass, $dbname, $dbprefix, $dbcharset );
 	$task		= mosGetParam( $_REQUEST, 'task', '' );
