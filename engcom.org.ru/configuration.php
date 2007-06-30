@@ -40,4 +40,17 @@ $dictionary_subject='[engcom] Новый перевод';
 $dictionary_wiki='http://l10n.lrn.ru/wiki/EngCom';
 $dictionary_index='index.php';
 $dictionary_download='http://etersoft.ru/download/engcom/encgom-current.tar.bz2';
+
+// настройки для работы Mail
+define('_DATE_FORMAT','l, F d Y');
+define('_DATE_FORMAT_LC',"%A, %d %B %Y");
+define('_DATE_FORMAT_LC2',"%A, %d %B %Y %H:%M");
+$mosConfig_mailer 	= 'mail';
+$mosConfig_mailfrom = 'MAILFROM';
+$mosConfig_fromname = 'FROMNONAME';
+$mosConfig_sendmail = '/usr/sbin/sendmail';
+$mosConfig_smtpauth = '0';
+$mosConfig_smtpuser = '';
+$mosConfig_smtppass = '';
+$mosConfig_smtphost = 'localhost';
 ?>
