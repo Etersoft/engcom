@@ -1,6 +1,6 @@
 <?php
 // --------------------------------------------------------------------------
-// $Id: dictionary.html.php,v 1.3 2007/06/30 22:11:37 pv Exp $
+// $Id: dictionary.html.php,v 1.4 2007/06/30 22:17:35 pv Exp $
 // --------------------------------------------------------------------------
 defined( '_ACCESS' ) or die( 'Direct Access to this location is not allowed.' );
 
@@ -163,9 +163,6 @@ function editForm($row)
 	if( $row->article != '' )
 	{
 		global $config_live_site,$dictionary_wiki;
-
-		// формируем меню (после раскраски, чтобы слова в меню не подсвечивались)
-		$dlnk = HTML_dictionary::refIndex("task=edit&word=$row->word");
 		$w_menu = '<ul style="padding-left: 5px;">';
 		$w_menu .="<li><a href=\"$dlnk\">Предложить</a></li>";
 		$w_menu .="<li><a href=\"$dwiki/$row->word\">Обсудить</a></li>";
