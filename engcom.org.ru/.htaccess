@@ -1,8 +1,19 @@
 <Files configuration.php>
-  Order Allow,Deny
-  Deny from All
+    Order Allow,Deny
+    Deny from All
 </Files>
 
-php5_value mbstring.internal_encoding UTF-8
-php5_value mbstring.func_overload 7
+<Files download.php>
+    Order Allow,Deny
+    Deny from All
+</Files>
 
+#RewriteBase /
+
+RewriteEngine On
+DirectoryIndex index.php
+
+RewriteRule ^css/(.*)$ css/$1 [L]
+RewriteRule ^images/(.*)$ images/$1 [L]
+RewriteRule ^index.php[\?]{0,1}(.*)$ index.php?$1 [NC,QSA,L]
+RewriteRule ^(.*)$ index.php?word=$1 [QSA]
