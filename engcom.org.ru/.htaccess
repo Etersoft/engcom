@@ -1,0 +1,8 @@
+<Files configuration.php>
+  Order Allow,Deny
+  Deny from All
+</Files>
+
+php5_value mbstring.internal_encoding UTF-8
+php5_value mbstring.func_overload 7
+
