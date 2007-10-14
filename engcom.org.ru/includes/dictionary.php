@@ -147,7 +147,13 @@ function save($word)
 	$comm 		= mosGetParam($_REQUEST, 'w_comm', '');
 	$author 	= mosGetParam($_REQUEST, 'w_author', '');
 	$a_email 	= mosGetParam($_REQUEST, 'w_email', '');
+	$a_email2 	= mosGetParam($_REQUEST, 'w_e', '');
 
+	if( $a_email != $a_email2 )
+	{
+		echo "<script> alert('Не совпадат адреса электронной почты!'); window.history.go(-1); </script>\n";
+		exit();
+	}
 
 	if( !$word )
 	{

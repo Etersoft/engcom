@@ -1,6 +1,6 @@
 <?php
 // --------------------------------------------------------------------------
-// $Id: dictionary.html.php,v 1.5 2007/07/09 16:31:45 pv Exp $
+// $Id: dictionary.html.php,v 1.6 2007/10/14 09:36:29 pv Exp $
 // --------------------------------------------------------------------------
 defined( '_ACCESS' ) or die( 'Direct Access to this location is not allowed.' );
 
@@ -158,6 +158,23 @@ function editForm($row)
 ?>
 <br><a href="<?php echo HTML_dictionary::refIndex(); ?>">Вернуться к словарю</a>
 <form action='<?php echo HTML_dictionary::refIndex(); ?>' method='post' name='dict_form'>
+
+	<script language="javascript" type="text/javascript">
+		function mysubmit()
+		{
+			var f = document.dict_form;
+			var e 	= /[\w\.\-]+@[\w\.\-]{2,}[\.\w]{0,4}/i;
+
+			if( f.w_email.value == "" || !e.test(f.w_email.value) ) {
+				alert("Некорректный адрес электронной почты");
+			else if( if( f.w_e.value != f.w_email.value ) {
+				alert("Не совпадат адреса электронной почты");
+			} else {
+				f.submit();
+			}
+		}
+	</script>
+
 <table cellpadding="2" cellspacing="3" border="0" width="100%">
 <?php
 	if( $row->article != '' )
@@ -206,10 +223,14 @@ function editForm($row)
 	<th width='150px' align='left'>email:</th>
 	<td><input type='text' class='inputbox' name='w_email' value='' size='70' maxlength='150'/></td>
 </tr>
+<tr>
+	<th width='150px' align='left'>Повторить email:</th>
+	<td><input type='text' class='inputbox' name='w_e' value='' size='70' maxlength='150'/></td>
+</tr>
 <tr><th colspan="2">&nbsp;</th></tr>
 
 <tr><td colspan='2' align='left'>
-	<input type='submit' name='submit' class='button' value='Отослать' />
+	<input type='button' name='submit' class='button' onclick="javascript:mysubmit()" value='Отослать' />
 	<input type='hidden' name='task' value='save' />
 	<input type='hidden' name='word' value="<?php echo $row->word; ?>" />
 </td></tr>
