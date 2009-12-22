@@ -1,0 +1,17 @@
+ (C) The Open English-Russian Dictionary of Computer Terms; (c) 2001-2008 released under GNU FDL license. E-mail: lav@etersoft.ru
+ (C) Современный свободный словарь компьютерных терминов. Все права на данный словарь принадлежат его составителям. Распространяется на условиях GNU FDL.
+ (C) Dictionary Format  A dictionary article concerning a dictionary word is implemented as a single line. Two blank symbols separate an English word from its translation. Russian characters are encoded according to koi8-r coding table. Transcription in IPA is shown in square brackets. Different meanings of the same word are indexed by Latin or Arabic numerals preceded by symbol "_", for example, _I-_VII, 1.-6., 1>-34>, а>-о>. A functional label is preceded by the symbol "_" and terminated by the symbol "." or ":".
+ (C) Формат словаря  Каждая словарная статья представляет собой строку. Два пробела отделяют английское слово от его перевода. Русские буквы кодируются в koi8-r. Транскрипция в формате IPA показывается в квадратных скобках. Различные значения одного слова индексируются латинскими или арабскими цифрами с предшествующим подчеркиванием. Например, _I-_VII, 1.-6., 1>-34>, а>-о>. Служебные слова начинаются с символа "_" и завершаются символом "." или ":".
+_a.  adjective имя прилагательное
+_adv.  adverb наречие
+_mis.  misuse неправильное употребление
+_n.  noun существительное
+_v.  verb глагол
+_полигр.  typography типографское дело
+_нерек.  не рекомендовано для использования
+_жаргон.  жаргонное выражение, например "железо"
+_интерф.  перевод в меню и интерфейсах с пользователем
+_прогр.  при программировании
+_уст.  устаревшее и в основном не использующееся в настоящее время
+_разг.  разговорное, не рекомендуемое для использования в письменном виде; жаргонное
+_яп.  японский (включено для совместимости с конвертором mueller7_parser.py, который определяет конец абберевиатур не по _, а по _яп. :)
