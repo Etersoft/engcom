@@ -84,7 +84,7 @@ Computer Dictionary in stardict format. It is not academic dictionary.
 содержанию компьютерной прессы и рассылок.
 
 %prep
-%setup -n %name
+%setup
 
 %build
 export LANG=C
@@ -97,7 +97,8 @@ mv EngCom.koi %dict_name.koi
 #makedict -i mueller7 -o xdxf %dict_name.koi %dict_name
 
 # Specially modified makedict convertor
-./engcom_parser.py %dict_name.koi | grep -v "<meta_info>" >%dict_name
+./engcom_parser.py %dict_name.koi >%dict_name.tmp
+grep -v "<meta_info>" %dict_name.tmp >%dict_name
 
 mkdir -p out
 # CHECKME: makes broken dict?
@@ -153,6 +154,9 @@ cd -
 %_datadir/stardict/dic/*
 
 %changelog
+* Tue Dec 22 2009 Vitaly Lipatov <lav@altlinux.ru> 1.36-alt1
+- new version, build from git
+
 * Tue Dec 09 2008 Vitaly Lipatov <lav@altlinux.ru> 1.35-alt2
 - cleanup spec (bug #18158)
 

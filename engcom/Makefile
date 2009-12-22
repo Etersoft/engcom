@@ -2,7 +2,7 @@
 # Создаём пригодный для mova словарь из исходных файлов
 
 DICT = EngCom
-PACKET = engcom-1.28
+PACKET = engcom-1.36
 DSRC = ${DICT}.source
 DDST = ${DICT}.koi
 
@@ -19,5 +19,5 @@ clean:
 	rm -f ${DDST} ${DSRC}.old
 
 distr: ${DDST}
-	cd ../.. ; tar cvfj ${PACKET}.tar.bz2 ${PACKET}/dict/${DSRC} ${PACKET}/dict/${DICT}.header ${PACKET}/dict/Makefile ${PACKET}/doc
+	cd ../.. ; tar cvfj ${PACKET}.tar.bz2 ${PACKET}/dict/${DSRC} ${PACKET}/dict/${DICT}.header ${PACKET}/dict/Makefile ${PACKET}/docs
 	
