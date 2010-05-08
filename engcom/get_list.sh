@@ -1,4 +1,4 @@
 #!/bin/sh
-# вывод только слов
+# п╡я▀п╡п╬п╢ я┌п╬п╩я▄п╨п╬ я│п╩п╬п╡
 infile=EngCom.source
 cat $infile | sed -e "s/  /	/g" | cut -f 1 | less

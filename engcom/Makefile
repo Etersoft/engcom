@@ -1,5 +1,5 @@
 # Written by Lav (c) 2002
-# óÏÚÄÁ£Í ÐÒÉÇÏÄÎÙÊ ÄÌÑ mova ÓÌÏ×ÁÒØ ÉÚ ÉÓÈÏÄÎÙÈ ÆÁÊÌÏ×
+# Ð¡Ð¾Ð·Ð´Ð°Ñ‘Ð¼ Ð¿Ñ€Ð¸Ð³Ð¾Ð´Ð½Ñ‹Ð¹ Ð´Ð»Ñ mova ÑÐ»Ð¾Ð²Ð°Ñ€ÑŒ Ð¸Ð· Ð¸ÑÑ…Ð¾Ð´Ð½Ñ‹Ñ… Ñ„Ð°Ð¹Ð»Ð¾Ð²
 
 DICT = EngCom
 PACKET = engcom-1.36
@@ -9,10 +9,9 @@ DDST = ${DICT}.koi
 all: ${DDST}
 
 ${DDST}: ${DICT}.header ${DSRC}
-	cat ${DICT}.header > ${DDST}
 	cp -f ${DSRC} ${DSRC}.old
 	cat ${DSRC}.old | sort > ${DSRC}
-	cat ${DSRC} >>${DDST}
+	cat ${DICT}.header ${DSRC} | iconv -f utf8 -t koi8-r > ${DDST}
 
 .PHONY: clean distr
 clean:
