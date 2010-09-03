@@ -5,7 +5,7 @@ function correct($token, $maxlen=50)
 {
 	$token = substr($token, 0, $maxlen);
 	$token = preg_replace("/[^\w\-\x7F-\xFF\s]/", " ", $token);
-//	запрет на слова менье 1-ой буквы...
+//	п╥п╟п©я─п╣я┌ п╫п╟ я│п╩п╬п╡п╟ п╪п╣п╫я▄п╣ 1-п╬п╧ п╠я┐п╨п╡я▀...
 //	$good_words = trim(preg_replace("/\s(\S{1})\s/", " ", preg_replace("/ +/", "  "," $token ")));
 //	$good_words = preg_replace("/ +/", " ", $good_words);
 
@@ -19,7 +19,7 @@ function correct($token, $maxlen=50)
 function search(&$word,$method)
 {
 	global $database, $maxSearhLength;
-	// Строка не должна быть больше $maxSearhLength символов
+	// п║я┌я─п╬п╨п╟ п╫п╣ п╢п╬п╩п╤п╫п╟ п╠я▀я┌я▄ п╠п╬п╩я▄я┬п╣ $maxSearhLength я│п╦п╪п╡п╬п╩п╬п╡
 	$word  = substr($word, 0, $maxSearhLength); 
 	$good_word = correct($word,$maxSearhLength);
 
@@ -33,7 +33,7 @@ function search(&$word,$method)
 	switch($method)
 	{
 		case 1:
-			// т.к. статья хранится в html виде, то надо искать только между тегов (т.е. ..>...<...)
+			// я┌.п╨. я│я┌п╟я┌я▄я▐ я┘я─п╟п╫п╦я┌я│я▐ п╡ html п╡п╦п╢п╣, я┌п╬ п╫п╟п╢п╬ п╦я│п╨п╟я┌я▄ я┌п╬п╩я▄п╨п╬ п╪п╣п╤п╢я┐ я┌п╣пЁп╬п╡ (я┌.п╣. ..>...<...)
 			$up_word = strtoupper($good_word);
 			$low_word = strtolower($good_word);
 			$query = "SELECT * FROM #__dictionary WHERE ";
@@ -71,7 +71,7 @@ function searchInFOLDOC(&$word,$method)
 
 function glossary($letter)
 {
-	// защита от неверного запроса
+	// п╥п╟я┴п╦я┌п╟ п╬я┌ п╫п╣п╡п╣я─п╫п╬пЁп╬ п╥п╟п©я─п╬я│п╟
 	if( strlen($letter) > 1 )
 	{
 		echo "<script>window.history.go(-1); </script>\n";
@@ -111,7 +111,7 @@ function edit($word)
 
 	global $database;
 
-	// защитные меры
+	// п╥п╟я┴п╦я┌п╫я▀п╣ п╪п╣я─я▀
 	$word = substr($word,0,50);
 
 	if( strlen($word)>2 && !correct($word) )
@@ -151,23 +151,23 @@ function save($word)
 
 	if( $a_email != $a_email2 )
 	{
-		echo "<script> alert('Не совпадат адреса электронной почты!'); window.history.go(-1); </script>\n";
+		echo "<script> alert('п²п╣ я│п╬п╡п©п╟п╢п╟я┌ п╟п╢я─п╣я│п╟ я█п╩п╣п╨я┌я─п╬п╫п╫п╬п╧ п©п╬я┤я┌я▀!'); window.history.go(-1); </script>\n";
 		exit();
 	}
 
 	if( !$word )
 	{
-		echo "<script> alert('Не указана словарная статья!'); window.history.go(-1); </script>\n";
+		echo "<script> alert('п²п╣ я┐п╨п╟п╥п╟п╫п╟ я│п╩п╬п╡п╟я─п╫п╟я▐ я│я┌п╟я┌я▄я▐!'); window.history.go(-1); </script>\n";
 		exit();
 	}
 
 	if( !$var )
 	{
-		echo "<script> alert('Не указан новый перевод!'); window.history.go(-1); </script>\n";
+		echo "<script> alert('п²п╣ я┐п╨п╟п╥п╟п╫ п╫п╬п╡я▀п╧ п©п╣я─п╣п╡п╬п╢!'); window.history.go(-1); </script>\n";
 		exit();
 	}
 
-	// безопасность
+	// п╠п╣п╥п╬п©п╟я│п╫п╬я│я┌я▄
 	$word 		= substr($word,0,50);
 	$comm 		= substr($comm,0,255);
 	$word 		= addslashes(htmlspecialchars($word));
@@ -180,22 +180,22 @@ function save($word)
 
 	global $dictionary_email;
 		
-	$message = "В словарь добавлен новый вариант перевода:";
+	$message = "п▓ я│п╩п╬п╡п╟я─я▄ п╢п╬п╠п╟п╡п╩п╣п╫ п╫п╬п╡я▀п╧ п╡п╟я─п╦п╟п╫я┌ п©п╣я─п╣п╡п╬п╢п╟:";
 	$message .="\n---------------------------------------\n";
 	$message .= "word: $word\n";
 	if ( $new_word != '' )
 	{
 		$message .="\n---------------------------------------\n";	
-		$message .= "Новый вариант слова:\n $new_word";
+		$message .= "п²п╬п╡я▀п╧ п╡п╟я─п╦п╟п╫я┌ я│п╩п╬п╡п╟:\n $new_word";
 	}
 	$message .="\n---------------------------------------\n";	
-	$message .= "перевод:\n $var";
+	$message .= "п©п╣я─п╣п╡п╬п╢:\n $var";
 	$message .="\n---------------------------------------\n";
 	$message .= "links: $links";
 	$message .="\n---------------------------------------\n";
-	$message .= "Дополнительная информация:\n $comm";
+	$message .= "п■п╬п©п╬п╩п╫п╦я┌п╣п╩я▄п╫п╟я▐ п╦п╫я└п╬я─п╪п╟я├п╦я▐:\n $comm";
 	$message .="\n---------------------------------------\n";	
-	$message .= "Автор:  $author\n";
+	$message .= "п░п╡я┌п╬я─:  $author\n";
 	$message .= "email:  $a_email";
 	$message .="\n---------------------------------------\n";	
 
@@ -205,11 +205,11 @@ function save($word)
 
 	if( !mosMail($m_from,'webmaster',$dictionary_email, $dictionary_subject, $message) )
 	{
-		echo "<script> alert('Не удалось отослать ваш вариант! Если Вам не сложно попробуйте ещё раз позже'); window.history.go(-1); </script>\n";
+		echo "<script> alert('п²п╣ я┐п╢п╟п╩п╬я│я▄ п╬я┌п╬я│п╩п╟я┌я▄ п╡п╟я┬ п╡п╟я─п╦п╟п╫я┌! п∙я│п╩п╦ п▓п╟п╪ п╫п╣ я│п╩п╬п╤п╫п╬ п©п╬п©я─п╬п╠я┐п╧я┌п╣ п╣я┴я▒ я─п╟п╥ п©п╬п╥п╤п╣'); window.history.go(-1); </script>\n";
 		exit();
 	}
 
-	echo "<script> alert('Спасибо! Ваш перевод отправлен редактору!'); window.history.go(-1); </script>\n";
+	echo "<script> alert('п║п©п╟я│п╦п╠п╬! п▓п╟я┬ п©п╣я─п╣п╡п╬п╢ п╬я┌п©я─п╟п╡п╩п╣п╫ я─п╣п╢п╟п╨я┌п╬я─я┐!'); window.history.go(-1); </script>\n";
 //	mosRedirect( HTML_dictionary::refindex() );
 }
 // ----------------------------------------------------------------------------------

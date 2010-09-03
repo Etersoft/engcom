@@ -3,32 +3,32 @@
 defined( '_ACCESS' ) or die( 'Direct Access to this location is not allowed.' );
 
 
-$dbhost	= 'localhost';
+$dbhost	= 'mysql.eterhost';
 $dbname	= 'engcom';
 $dbuser	= 'engcom';
-$dbpass	= 'engcom';
+$dbpass	= 'mSDDMEbwenyZntRe';
 $dbprefix	= 'mos_';
-$dbcharset = 'koi8r';
+$dbcharset = 'utf8';
 
 
 $conf_absolute_path	= '/home/lav/www/engcom.org.ru';
 $conf_life_site		= 'http://engcom.org.ru';
 $mosConfig_debug	= 0;
 
-$conf_offline_msg	= 'éÚ×ÉÎÉÔÅ ÓÁÊÔ ×ÒÅÍÅÎÎÏ ÎÅ ÒÁÂÏÔÁÅÔ. ðÏÐÒÏÂÕÊÔÅ ÚÁÊÔÉ Ë ÎÁÍ ÞÅÒÅÚ 15ÍÉÎ';
-$conf_sitename		= 'óÌÏ×ÁÒØ ËÏÍÐØÀÔÅÒÎÙÈ ÔÅÒÍÉÎÏ× Engcom';
+$conf_offline_msg	= 'Ð˜Ð·Ð²Ð¸Ð½Ð¸Ñ‚Ðµ ÑÐ°Ð¹Ñ‚ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð½Ð¾ Ð½Ðµ Ñ€Ð°Ð±Ð¾Ñ‚Ð°ÐµÑ‚. ÐŸÐ¾Ð¿Ñ€Ð¾Ð±ÑƒÐ¹Ñ‚Ðµ Ð·Ð°Ð¹Ñ‚Ð¸ Ðº Ð½Ð°Ð¼ Ñ‡ÐµÑ€ÐµÐ· 15Ð¼Ð¸Ð½';
+$conf_sitename		= 'Ð¡Ð»Ð¾Ð²Ð°Ñ€ÑŒ ÐºÐ¾Ð¼Ð¿ÑŒÑŽÑ‚ÐµÑ€Ð½Ñ‹Ñ… Ñ‚ÐµÑ€Ð¼Ð¸Ð½Ð¾Ð² Engcom';
 
 $config_sessionInMySQL 	= 1;
 $config_sessionLifeTime = 3600; 
 $config_sessionName 	= 'DICTSID';
-$config_charset 		= 'koi8-r';
+$config_charset 		= 'utf8';
 $config_display 		= '150';
 $config_year_low		= '2005';
 $config_year_hi			= '2010';
 
 
-// îÁÓÔÒÏËÉ ÓÌÏ×ÁÒÑ
-$dictionary_name='óÌÏ×ÁÒØ ËÏÍÐØÀÔÅÒÎÙÈ ÔÅÒÍÉÎÏ× EngCom';
+// ÐÐ°ÑÑ‚Ñ€Ð¾ÐºÐ¸ ÑÐ»Ð¾Ð²Ð°Ñ€Ñ
+$dictionary_name='Ð¡Ð»Ð¾Ð²Ð°Ñ€ÑŒ ÐºÐ¾Ð¼Ð¿ÑŒÑŽÑ‚ÐµÑ€Ð½Ñ‹Ñ… Ñ‚ÐµÑ€Ð¼Ð¸Ð½Ð¾Ð² EngCom';
 $dictionary_version='';
 $dictionary_date='01-07-2007';
 $dictionary_items='2209';
@@ -36,12 +36,12 @@ $dictionary_lang='russian';
 $maxSearhLength=50;
 $dictionary_email='lav@etersoft.ru';
 $dictionary_edit=1;
-$dictionary_subject='[engcom] îÏ×ÙÊ ÐÅÒÅ×ÏÄ';
+$dictionary_subject='[engcom] ÐÐ¾Ð²Ñ‹Ð¹ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´';
 $dictionary_wiki='http://l10n.lrn.ru/wiki/EngCom';
 $dictionary_index='index.php';
 $dictionary_download='http://etersoft.ru/download/engcom/encgom-current.tar.bz2';
 
-// ÎÁÓÔÒÏÊËÉ ÄÌÑ ÒÁÂÏÔÙ Mail
+// Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ Ð´Ð»Ñ Ñ€Ð°Ð±Ð¾Ñ‚Ñ‹ Mail
 define('_DATE_FORMAT','l, F d Y');
 define('_DATE_FORMAT_LC',"%A, %d %B %Y");
 define('_DATE_FORMAT_LC2',"%A, %d %B %Y %H:%M");
@@ -52,5 +52,5 @@ $mosConfig_sendmail = '/usr/sbin/sendmail';
 $mosConfig_smtpauth = '0';
 $mosConfig_smtpuser = '';
 $mosConfig_smtppass = '';
-$mosConfig_smtphost = 'localhost';
+$mosConfig_smtphost = 'mail.etersoft.ru:587';
 ?>

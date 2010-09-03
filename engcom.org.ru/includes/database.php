@@ -1,13 +1,13 @@
 <?php
 ////////////////////////////////////////
-//  Файл из пакета дистрибутива:
+//  Р¤Р°Р№Р» РёР· РїР°РєРµС‚Р° РґРёСЃС‚СЂРёР±СѓС‚РёРІР°:
 //  CMS "Mambo 4.5.2.3 Paranoia Light"
-//  Дата выпуска: 16.08.2005
-//  Исправленная и доработанная версия
-//  Локализация и сборка дистрибутива:
+//  Р”Р°С‚Р° РІС‹РїСѓСЃРєР°: 16.08.2005
+//  РСЃРїСЂР°РІР»РµРЅРЅР°СЏ Рё РґРѕСЂР°Р±РѕС‚Р°РЅРЅР°СЏ РІРµСЂСЃРёСЏ
+//  Р›РѕРєР°Р»РёР·Р°С†РёСЏ Рё СЃР±РѕСЂРєР° РґРёСЃС‚СЂРёР±СѓС‚РёРІР°:
 //  - AndyR - mailto:andyr@mail.ru
 //////////////////////////////////////
-// Не удаляйте строку ниже:
+// РќРµ СѓРґР°Р»СЏР№С‚Рµ СЃС‚СЂРѕРєСѓ РЅРёР¶Рµ:
 $andyr_signature='Mambo_4523_Paranoia_019';
 ?>
 <?php
@@ -537,7 +537,7 @@ class database {
 	* @return string A standised error message
 	*/
 	function stderr( $showSQL = false ) {
-		return "БД ошибка функции, код возврата: $this->_errorNum"
+		return "Р‘Р” РѕС€РёР±РєР° С„СѓРЅРєС†РёРё, РєРѕРґ РІРѕР·РІСЂР°С‚Р°: $this->_errorNum"
 		."<br /><font color=\"red\">$this->_errorMsg</font>"
 		.($showSQL ? "<br />SQL = <pre>$this->_sql</pre>" : '');
 	}
@@ -752,7 +752,7 @@ class mosDBTable {
 			$ret = $this->_db->insertObject( $this->_tbl, $this, $this->_tbl_key );
 		}
 		if( !$ret ) {
-			$this->_error = strtolower(get_class( $this ))."::запись неудачна <br />" . $this->_db->getErrorMsg();
+			$this->_error = strtolower(get_class( $this ))."::Р·Р°РїРёСЃСЊ РЅРµСѓРґР°С‡РЅР° <br />" . $this->_db->getErrorMsg();
 			return false;
 		} else {
 			return true;
@@ -827,7 +827,7 @@ class mosDBTable {
 		$k = $this->_tbl_key;
 
 		if (!array_key_exists( 'ordering', get_class_vars( strtolower(get_class( $this )) ) )) {
-			$this->_error = "ВНИМАНИЕ: ".strtolower(get_class( $this ))." не поддержтвает сортировку.";
+			$this->_error = "Р’РќРРњРђРќРР•: ".strtolower(get_class( $this ))." РЅРµ РїРѕРґРґРµСЂР¶С‚РІР°РµС‚ СЃРѕСЂС‚РёСЂРѕРІРєСѓ.";
 			return false;
 		}
 
@@ -962,7 +962,7 @@ class mosDBTable {
 
 	function checkout( $who, $oid=null ) {
 		if (!array_key_exists( 'checked_out', get_class_vars( strtolower(get_class( $this )) ) )) {
-			$this->_error = "ВНИМАНИЕ: ".strtolower(get_class( $this ))." не поддерживает checkouts.";
+			$this->_error = "Р’РќРРњРђРќРР•: ".strtolower(get_class( $this ))." РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚ checkouts.";
 			return false;
 		}
 		$k = $this->_tbl_key;
@@ -988,7 +988,7 @@ class mosDBTable {
 
 	function checkin( $oid=null ) {
 		if (!array_key_exists( 'checked_out', get_class_vars( strtolower(get_class( $this )) ) )) {
-			$this->_error = "ВНИМАНИЕ: ".strtolower(get_class( $this ))." не поддерживает checkin.";
+			$this->_error = "Р’РќРРњРђРќРР•: ".strtolower(get_class( $this ))." РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚ checkin.";
 			return false;
 		}
 		$k = $this->_tbl_key;
@@ -1067,7 +1067,7 @@ class mosDBTable {
 	*/
 	function publish_array( $cid=null, $publish=1, $myid=0 ) {
 		if (!is_array( $cid ) || count( $cid ) < 1) {
-			$this->_error = "Не выбран объект.";
+			$this->_error = "РќРµ РІС‹Р±СЂР°РЅ РѕР±СЉРµРєС‚.";
 			return false;
 		}
 

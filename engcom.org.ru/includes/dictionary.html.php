@@ -36,11 +36,11 @@ function viewSearchForm($word='',$mid=0)
 ?>
 <form action='<?php echo HTML_dictionary::refIndex(); ?>' method='POST' name='searchForm'>
 <h1 class="contentheading"><?php echo $dictionary_name; ?></h1>
-<p><b>Версия от</b>&nbsp;<?php echo $dictionary_date; ?>
-&nbsp;&nbsp;<b>Словарных статей:</b> <?php echo $dictionary_items; ?>
-&nbsp;&nbsp;<b>Описание:</b> <a href="<?php echo $config_live_site;?>/content/view/30/63/">О проекте</a>
-&nbsp;&nbsp;<b>Загрузить:</b> <a href="<?php echo $dictionary_download; ?>">engcom-current.tar.bz2</a>
-</p><p><b>Замечания и предложения:</b> <a href="<?php echo $dictionary_wiki; ?>/TODO"><?php echo $dictionary_wiki;?>/TODO</a>
+<p><b>п▓п╣я─я│п╦я▐ п╬я┌</b>&nbsp;<?php echo $dictionary_date; ?>
+&nbsp;&nbsp;<b>п║п╩п╬п╡п╟я─п╫я▀я┘ я│я┌п╟я┌п╣п╧:</b> <?php echo $dictionary_items; ?>
+&nbsp;&nbsp;<b>п·п©п╦я│п╟п╫п╦п╣:</b> <a href="<?php echo $config_live_site;?>/content/view/30/63/">п· п©я─п╬п╣п╨я┌п╣</a>
+&nbsp;&nbsp;<b>п≈п╟пЁя─я┐п╥п╦я┌я▄:</b> <a href="<?php echo $dictionary_download; ?>">engcom-current.tar.bz2</a>
+</p><p><b>п≈п╟п╪п╣я┤п╟п╫п╦я▐ п╦ п©я─п╣п╢п╩п╬п╤п╣п╫п╦я▐:</b> <a href="<?php echo $dictionary_wiki; ?>/TODO"><?php echo $dictionary_wiki;?>/TODO</a>
 </p>
 <p>&nbsp;</p>
 <p><?php echo _DICT_SEARCH_METHOD."&nbsp;&nbsp;:"; echo $methods; ?>
@@ -91,7 +91,7 @@ function showResult(&$rows, $word, $method=0)
 		if( $dictionary_edit )
 		{
 ?>
-		<p>&nbsp;&nbsp;<a href="<?php echo HTML_dictionary::refIndex("task=addnew&word=$word"); ?> "><strong>Можно добавить...</strong></a></p>
+		<p>&nbsp;&nbsp;<a href="<?php echo HTML_dictionary::refIndex("task=addnew&word=$word"); ?> "><strong>п°п╬п╤п╫п╬ п╢п╬п╠п╟п╡п╦я┌я▄...</strong></a></p>
 <?php
 		}
 
@@ -117,23 +117,23 @@ function showResult(&$rows, $word, $method=0)
 <?php
 		} 
 
-		// делаем слово ссылкой
+		// п╢п╣п╩п╟п╣п╪ я│п╩п╬п╡п╬ я│я│я▀п╩п╨п╬п╧
 		$row->article = preg_replace("/>[^<]{0,1}($row->word)/i","<a href='$config_live_site/$row->word'>\\1</a>", $row->article);
 
-		// Преобразуем ссылки на другие слова
+		// п÷я─п╣п╬п╠я─п╟п╥я┐п╣п╪ я│я│я▀п╩п╨п╦ п╫п╟ п╢я─я┐пЁп╦п╣ я│п╩п╬п╡п╟
 		$row->article = preg_replace("/{link:([^\}]{1,})}/i","<a href='$config_live_site/\\1'>\\1</a>",$row->article);
 	
 		$row->article = stripslashes($row->article);
 
-		// выделяем слово
-		// исключение '&' - это если в тексте встречаются &lt; &gt; и т.д. а поиск идёт по буквам 'l','g' и т.п.
+		// п╡я▀п╢п╣п╩я▐п╣п╪ я│п╩п╬п╡п╬
+		// п╦я│п╨п╩я▌я┤п╣п╫п╦п╣ '&' - я█я┌п╬ п╣я│п╩п╦ п╡ я┌п╣п╨я│я┌п╣ п╡я│я┌я─п╣я┤п╟я▌я┌я│я▐ &lt; &gt; п╦ я┌.п╢. п╟ п©п╬п╦я│п╨ п╦п╢я▒я┌ п©п╬ п╠я┐п╨п╡п╟п╪ 'l','g' п╦ я┌.п©.
 		$row->article = preg_replace("/\>([^<\&\{]*)($word)/i", ">\\1<font color='red'>\\2</font>", $row->article);
 
-		// формируем меню (после раскраски, чтобы слова в меню не подсвечивались)
+		// я└п╬я─п╪п╦я─я┐п╣п╪ п╪п╣п╫я▌ (п©п╬я│п╩п╣ я─п╟я│п╨я─п╟я│п╨п╦, я┤я┌п╬п╠я▀ я│п╩п╬п╡п╟ п╡ п╪п╣п╫я▌ п╫п╣ п©п╬п╢я│п╡п╣я┤п╦п╡п╟п╩п╦я│я▄)
 		$dlnk = HTML_dictionary::refIndex("task=edit&word=$row->word");
 		$w_menu = '<ul style="padding-left: 5px;">';
-		$w_menu .="<li><a href=\"$dlnk\">Предложить</a></li>";
-		$w_menu .="<li><a href=\"$dwiki/$row->word\">Обсудить</a></li>";
+		$w_menu .="<li><a href=\"$dlnk\">п÷я─п╣п╢п╩п╬п╤п╦я┌я▄</a></li>";
+		$w_menu .="<li><a href=\"$dwiki/$row->word\">п·п╠я│я┐п╢п╦я┌я▄</a></li>";
 		$w_menu .= "</ul><hr style='padding-left: 10px; padding-right: 10px;' width='98%' align='center'><ul style='padding-left: 5px;'>";
 		$w_menu .="<li><a href=\"http://wikipedia.org/wiki/$row->word\">Wikipedia</a></li>";
 		$w_menu .="<li><a href=\"http://wiktionary.org/wiki/$row->word\">Wiktionary</a></li>";
@@ -156,7 +156,7 @@ function showResult(&$rows, $word, $method=0)
 function editForm($row)
 {
 ?>
-<br><a href="<?php echo HTML_dictionary::refIndex(); ?>">Вернуться к словарю</a>
+<br><a href="<?php echo HTML_dictionary::refIndex(); ?>">п▓п╣я─п╫я┐я┌я▄я│я▐ п╨ я│п╩п╬п╡п╟я─я▌</a>
 <form action='<?php echo HTML_dictionary::refIndex(); ?>' method='post' name='dict_form'>
 
 	<script language="javascript" type="text/javascript">
@@ -166,9 +166,9 @@ function editForm($row)
 			var e 	= /[\w\.\-]+@[\w\.\-]{2,}[\.\w]{0,4}/i;
 
 			if( f.w_email.value == "" || !e.test(f.w_email.value) ) {
-				alert("Некорректный адрес электронной почты");
+				alert("п²п╣п╨п╬я─я─п╣п╨я┌п╫я▀п╧ п╟п╢я─п╣я│ я█п╩п╣п╨я┌я─п╬п╫п╫п╬п╧ п©п╬я┤я┌я▀");
 			else if( if( f.w_e.value != f.w_email.value ) {
-				alert("Не совпадат адреса электронной почты");
+				alert("п²п╣ я│п╬п╡п©п╟п╢п╟я┌ п╟п╢я─п╣я│п╟ я█п╩п╣п╨я┌я─п╬п╫п╫п╬п╧ п©п╬я┤я┌я▀");
 			} else {
 				f.submit();
 			}
@@ -185,8 +185,8 @@ function editForm($row)
 		$dlnk 	= HTML_dictionary::refIndex("task=edit&word=$row->word");
 		
 		$w_menu = '<ul style="padding-left: 5px;">';
-		$w_menu .="<li><a href=\"$dlnk\">Предложить</a></li>";
-		$w_menu .="<li><a href=\"$dwiki/$row->word\">Обсудить</a></li>";
+		$w_menu .="<li><a href=\"$dlnk\">п÷я─п╣п╢п╩п╬п╤п╦я┌я▄</a></li>";
+		$w_menu .="<li><a href=\"$dwiki/$row->word\">п·п╠я│я┐п╢п╦я┌я▄</a></li>";
 		$w_menu .= "</ul><hr style='padding-left: 10px; padding-right: 10px;' width='98%' align='center'><ul style='padding-left: 5px;'>";
 		$w_menu .="<li><a href=\"http://wikipedia.org/wiki/$row->word\">Wikipedia</a></li>";
 		$w_menu .="<li><a href=\"http://wiktionary.org/wiki/$row->word\">Wiktionary</a></li>";
@@ -195,28 +195,28 @@ function editForm($row)
 		$w_menu .= '</ul>';
 		$row->article = preg_replace("/\{MENU\}/",$w_menu, $row->article);
 ?>
-	<tr><td colspan='2' align='left'><h4>Оригинальная статья:</h4>
+	<tr><td colspan='2' align='left'><h4>п·я─п╦пЁп╦п╫п╟п╩я▄п╫п╟я▐ я│я┌п╟я┌я▄я▐:</h4>
 			<p><?php echo $row->article; ?>
 		</td></tr>
 <?php
 	}
 ?>
 <tr><td colspan='2'><hr></td></tr>
-<tr><td colspan='2' align='left'><h4>Добавить вариант перевода:</h4></td></tr>
-<tr><th width='100px' align='left'>Слово:&nbsp;</th><td>
+<tr><td colspan='2' align='left'><h4>п■п╬п╠п╟п╡п╦я┌я▄ п╡п╟я─п╦п╟п╫я┌ п©п╣я─п╣п╡п╬п╢п╟:</h4></td></tr>
+<tr><th width='100px' align='left'>п║п╩п╬п╡п╬:&nbsp;</th><td>
 		<input type='text' class='inputbox' name='w_newword' value='<?php echo $row->word; ?>' size='70' maxlength='150' />
 </td></tr>
-<tr><th width='150px' align='left'>Перевод:</th>
+<tr><th width='150px' align='left'>п÷п╣я─п╣п╡п╬п╢:</th>
 	<td><textarea id='input' class='inputbox' name="w_variant" rows='4' cols='70'></textarea></td>
 </tr>
-<tr><th width='150px' align='left'>Ссылки на другие статьи:</th>
+<tr><th width='150px' align='left'>п║я│я▀п╩п╨п╦ п╫п╟ п╢я─я┐пЁп╦п╣ я│я┌п╟я┌я▄п╦:</th>
 	<td><input type='text' class='inputbox' name='w_links' value='' size='70' maxlength='150'/></td>
 </tr>
-<tr><th width='150px' align='left'>Дополнительная информация:</th>
+<tr><th width='150px' align='left'>п■п╬п©п╬п╩п╫п╦я┌п╣п╩я▄п╫п╟я▐ п╦п╫я└п╬я─п╪п╟я├п╦я▐:</th>
 	<td><textarea id='input' class='inputbox' name="w_comm" rows='4' cols='70'></textarea>
 </td></tr>
 <tr>
-	<th width='150px' align='left'>Автор:</th>
+	<th width='150px' align='left'>п░п╡я┌п╬я─:</th>
 	<td><input type='text' class='inputbox' name='w_author' value='' size='70' maxlength='150'/></td>
 </tr>
 <tr>
@@ -224,13 +224,13 @@ function editForm($row)
 	<td><input type='text' class='inputbox' name='w_email' value='' size='70' maxlength='150'/></td>
 </tr>
 <tr>
-	<th width='150px' align='left'>Повторить email:</th>
+	<th width='150px' align='left'>п÷п╬п╡я┌п╬я─п╦я┌я▄ email:</th>
 	<td><input type='text' class='inputbox' name='w_e' value='' size='70' maxlength='150'/></td>
 </tr>
 <tr><th colspan="2">&nbsp;</th></tr>
 
 <tr><td colspan='2' align='left'>
-	<input type='button' name='submit' class='button' onclick="javascript:mysubmit()" value='Отослать' />
+	<input type='button' name='submit' class='button' onclick="javascript:mysubmit()" value='п·я┌п╬я│п╩п╟я┌я▄' />
 	<input type='hidden' name='task' value='save' />
 	<input type='hidden' name='word' value="<?php echo $row->word; ?>" />
 </td></tr>
