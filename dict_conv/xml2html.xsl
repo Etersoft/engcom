@@ -62,19 +62,24 @@
 
 
 <xsl:template match="/">
-<xsl:value-of select="dictionary/@name"/>{*}
+<xsl:value-of select="dictionary/@name"/>{*}<xsl:value-of select="dictionary/@version"/>{*}<xsl:value-of select="dictionary/@last_modify"/>{*}
 <xsl:for-each select="dictionary/article">
 <xsl:value-of select="@word"/>{|}
-<p><dl><dt><strong><xsl:value-of select="@word"/></strong></dt>
+<table cellspacing="2" cellpadding="2" border="0" width="98%">
+<tr>
+<td valign="top" align="left" width="5%">{MENU}</td>
+<td align="left" valign="top" style="padding-left: 20px;">
+<strong><xsl:value-of select="@word"/></strong>
+<br/>
 <xsl:variable name="totalTypes" select="count(type)"/>
 <xsl:for-each select="type">
 	<xsl:call-template name="type">  
 		<xsl:with-param name="num" select="$totalTypes"/>
 	</xsl:call-template>
 </xsl:for-each>
-</dl>
-</p>
-<br />
+</td></tr>
+</table>
+<br/>
 <!-- перевод строки, пока делаю таким образом-->
 <xsl:text>
 {==}
@@ -85,7 +90,6 @@
 <!-- Разбор частей речи -->
 <xsl:template name="type">  
 	<xsl:param name="num">0</xsl:param>
-	<dd>
 	<b>
 	<xsl:if test="$num>1">
 		<xsl:number value="position()" format="1. "/>
@@ -97,14 +101,12 @@
 		</xsl:call-template>
 	</xsl:if>
 	</b>
-	</dd>
 	<xsl:variable name="totalMeaning" select="count(meaning)"/>	
 	<xsl:for-each select="meaning">
-	<dd>
+	<br/>
 		<xsl:call-template name="meaning">
 			<xsl:with-param name="num" select="$totalMeaning"/>
 		</xsl:call-template>
-	</dd>
 	</xsl:for-each>
 </xsl:template>
 

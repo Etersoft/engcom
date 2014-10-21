@@ -1,22 +1,28 @@
 #!/usr/bin/php 
 <?php
 // -----------------------------------------------------
-// $Id: mova2xml.php,v 1.5 2005/03/08 20:08:12 pv Exp $
-// $Date: 2005/03/08 20:08:12 $
+// $Id: mova2xml.php,v 1.7 2006/02/04 21:36:30 pv Exp $
+// $Date: 2006/02/04 21:36:30 $
 // -----------------------------------------------------
+$DEBUG=0;
 
-
+/*
 	if( $argc < 2 )
 	{
 		echo "\n\nНе задан входной файл! ";
 		echo "\nusage: ".$argv[0]." file.dict\n\n";
 		exit();
 	}
-
 	$src = $argv[1];
+*/	
+	$src='EngCom.source';
 	$dictname = $src;
 	if( isset($argv[2]) )
 		$dictname = $argv[2];
+
+	$dictdate='';
+	if( $dictdate = filectime($src) )
+		$dictdate = date('d-m-Y',$dictdate);
 
 
 // ===================================================================
@@ -28,22 +34,27 @@
 // ===================================================================
 
 // перечень типов для частей речи
-$types['_a.'] 	= "adjective"; // имя прилагательное";
-$types['_adv.'] = "adverb"; // наречие";
-$types['_n.']= "noun"; // существительное";
-$types['_v.']= "verb"; // глагол";
-$types['_mis.'] = "misuse"; // неправильное употребление";
+$types['_a.'] 	= "adjective"; 	// имя прилагательное";
+$types['_adv.'] = "adverb"; 	// наречие";
+$types['_n.']	= "noun"; 		// существительное";
+$types['_v.']	= "verb"; 		// глагол";
+$types['_mis.'] = "misuse"; 	// неправильное употребление";
 
 // перечень типов для вариантов перевода
-$variant_types['_полигр.']= "typography"; // типографское дело";
-$variant_types['_нерек.']= "depricated"; // не рекомендовано для использования";
-$variant_types['_жаргон.']= "jargon"; // жаргонное выражение, например 'железо'";
-$variant_types['_интерф.']= "dialog"; // перевод в интерфейсах с пользователем";
-$variant_types['_прогр.']= "program"; // при программировании";
-$variant_types['_уст.']= "obsolete"; // устаревшее и в основном не использующееся в настоящее время";
+$variant_types['_полигр.']	= "typography"; 	// типографское дело";
+$variant_types['_нерек.']	= "depricated"; 	// не рекомендовано для использования";
+$variant_types['_жаргон.']	= "jargon"; 		// жаргонное выражение, например 'железо'";
+$variant_types['_жарг.']	= "jargon"; 		// жаргонное выражение, например 'железо'";
+$variant_types['_интерф.']	= "dialog"; 		// перевод в интерфейсах с пользователем";
+$variant_types['_прогр.']	= "program"; 		// при программировании";
+$variant_types['_уст.']		= "obsolete"; 		// устаревшее и в основном не использующееся в настоящее время";
 
 // ===================================================================
-
+function debug($str)
+{
+	global $DEBUG;
+	if($DEBUG) echo $str;
+}
 
 // -------------------------------------------------------------------------------------------
 require_once("fast_template.class.php");
@@ -61,7 +72,10 @@ class Variant
 		global $variant_types;
 		echo "$this->text ";
 		if( count($this->type) <= 1 )
-			echo " type: $this->type[0]";
+		{
+			if( isset($this->type[0]) )
+				echo $this->text." - type: ???";
+		}
 		else
 		{
 			echo "type: ";
@@ -75,39 +89,35 @@ class Variant
 	{
 		global $variant_types;
 
-		if( !count($this->text) )
-			return array("","");
+		if( $this->text=='' )
+			return array('','');
 
 		$text = htmlspecialchars($this->text);
-		$type = "";
+		$type = array();
 
-		if( count($this->type)<=1 )
-			$type=$variant_types[$this->type[0]];
+		// преобразуем типы
+		if( count($this->type) < 1 )
+			$type = '';
 		else
 		{
-//			$type = $variant_types[$this->type[0]];
-//			echo "\nПотеряли типы для слова: $text оставляем $type\n";
-
-			$type = array();
-			// преобразуем типы
-			$cn = count($this->type);
-			for($i=0; $i<$cn; $i++ )
+			while( list($k1,$v1) = each($this->type) )
 			{
-				$tt = $variant_types[$this->type[$i]];
-				if( $tt )
-					array_push($type,$tt);
+				if( isset($variant_types[$v1]) )
+					array_push($type,$variant_types[$v1]);
 				else	// добавляем как есть, если не нашли
-					array_push($type, $this->type[$i]);
+					array_push($type,$v1);
 			}
 		}
+
 		return array($text,$type);
 	}
 }
 // -------------------------------------------------------------------------------------------
 class Meaning 
 {
-	var $variants = array(); // варианты
-	var $links = array();
+	var $variants 	= array(); // варианты
+	var $links 		= array();
+
 	function Meaning() 
 	{
 	}
@@ -127,7 +137,6 @@ class Meaning
 		    echo "<li>$v1</li>";
 		}
 		echo "</ul>";
-
 	}
 
 	function varToXML()
@@ -140,33 +149,35 @@ class Meaning
 			'main'=>'variant.tpl'
 		));
 
+		debug("var count: ".count($this->variants)."\n");
 		reset($this->variants);
 		while( list($k1,$v1) = each($this->variants) )
 		{
+			debug("var: ".$v1->text."\n");
 			list($txt,$type) = $v1->varToXml();
-			if( $txt )
+			if( $txt=='' )
+				continue;
+
+			if( !is_array($type) )
 			{
-				if( !is_array($type) )
+				$tpl->assign( array(
+					'TXT'	=> $txt,
+					'TYPE'	=> $type
+				));
+
+				$tpl->parse('MAIN',".main");
+			}
+			else
+			{
+				// если вариант имеет несколько типов
+				// то делаем каждый тип вариантом перевода!
+				while( list($k2,$v2) = each($type) )
 				{
 					$tpl->assign( array(
-						'TXT'=>$txt,
-						'TYPE'=>$type
+						'TXT'	=> $txt,
+						'TYPE'	=> $v2
 					));
 					$tpl->parse('MAIN',".main");
-				}
-				else
-				{
-					// если вариант имеет несколько типов
-					// то делаем каждый тип вариантом перевода!
-					$cn = count($type);
-					for($i=0; $i<$cn; $i++ )
-					{
-						$tpl->assign( array(
-							'TXT'=>$txt,
-							'TYPE'=>$type[$i]
-						));
-						$tpl->parse('MAIN',".main");
-					}
 				}
 			}
 		}		
@@ -180,6 +191,7 @@ class Meaning
 			return "";
 
 		$tpl = new FastTemplate("templates");
+		$tpl->no_error();
 		$tpl->define(array(
 			'main' => 'link.tpl'
 		));
@@ -210,16 +222,19 @@ class Part
 	function myPrint() 
 	{
 		global $types;
-		echo " type: ($this->type) "; echo $types[$this->type];
+//		echo " type: ($this->type) "; echo $types[$this->type];
 		while( list($k1,$v1) = each($this->meanings) )
 		{
-			echo "<p> смысл("; echo $k1+1; echo ")";
+//			echo "<p> смысл("; echo $k1+1; echo ")";
 			$v1->myPrint();
 		}
 	}
 
 	function toXML() 
 	{
+		if( count($this->meanings) <=0 )
+			return;
+	
 		$tpl = new FastTemplate("templates");
 		$tpl->define(array(
 			'main'=>'meaning.tpl'
@@ -227,12 +242,15 @@ class Part
 		
 		while( list($k1,$v1) = each($this->meanings) )
 		{
+			debug("variants: ".count($v1->variants)."\n");
 			$tpl->assign( array(
-				'VARIANTS'=> $v1->varToXML(),
-				'LINKS'=> $v1->linksToXML()
+				'VARIANTS'	=> $v1->varToXML(),
+				'LINKS'		=> $v1->linksToXML()
 			));
+
 			$tpl->parse('MAIN',".main");
 		}		
+
 		return $tpl->fetch('MAIN');
 	}
 }
@@ -249,8 +267,7 @@ class Doc
 
 	function myPrint() 
 	{
-		echo "<P>'<u><i>$this->word</u></i>'</P>";
-
+//		echo "<P>'<u><i>$this->word</u></i>'</P>";
 		while( list($k1,$v1) = each($this->parts) )
 		{
 			echo "<p>"; echo $k1+1; echo ")";
@@ -260,6 +277,9 @@ class Doc
 
 	function toXML() 
 	{
+		if( count($this->parts) <=0 )
+			return "";
+
 		$tpl = new FastTemplate("templates");
 		$tpl->define(array(
 			'main'=>'article.tpl',
@@ -272,18 +292,24 @@ class Doc
 			reset($this->parts);
 			while( list($k1,$v1) = each($this->parts) )
 			{
-				$type = $v1->type;
+				$type = '';
 			    if( is_array($v1->type) )
 				{
 					// здесь надобы разобрать типы
 					// пока берем первый
-					$type=$v1->type[0];
+					$type = $v1->type[0];
 				}
+				else
+					$type = $v1->type;
+
+				if( isset($types[$type]) )
+					$type=$types[$type];
 
 				$tpl->assign( array(
-					'NAME' => $types[$type],
-					'MEANINGS' => $v1->toXML()
+					'NAME' 		=> $type,
+					'MEANINGS' 	=> $v1->toXML()
 				));
+
 				$tpl->parse('PARTS',".part");
 			}
 		}
@@ -298,169 +324,156 @@ class Doc
 		// при использовании шаблонов образуются пустые строки
 		// приходится убирать их за два прохода
 		$str=$tpl->fetch('MAIN');
-		$str=str_replace("\n\n","\n",$str);
-		return str_replace("\n\n","\n",$str);
+		return preg_replace("/([\n]{2,})/","\n",$str);
 	}
 }
 // -------------------------------------------------------------------------------------------
-
-function parse_variant_type(&$str, &$var)
-{
-	// шаблон: _type. _type2. _typeN. text
-
-	// по идее определение типа должно идти впереди
-	// поэтому как только определения кончились
-	// прекращаем поиск
-	$tmp = explode(". ",$str);
-	reset($tmp);
-	while( list($key, $val) = each($tmp) )
-	{
-		$val = trim($val);
-		if(!$val)
-			continue;
-
-		if( eregi("(^_.*$)",$val) )
-			array_push($var->type,"$val.");
-		else
-		{
-			$var->text = $val;
-			break;
-		}
-	}	
-}
-// -------------------------------------------------
 function parse_variant(&$str, &$variant)
 {
-	global $variant_types;
-	$str = trim($str);
-	if( !eregi("(_.*\.)",$str) )
+	// варианты тоже могут иметь типы
+	// _жарг. | _интерф. | _полигр
+	// поэтому их отдельно необходимо определить
+	$tmp = array();	
+	// tmp[0] - исходная строка
+	// tmp[1] - тип
+	// tmp[2] - вариант
+	debug("\nstring: $str\n");
+	if( preg_match("/^(\_[^.]{1,}\.) (.*)$/",$str,$tmp) )
 	{
-		$variant->text = $str;
-		return;
+		array_push($variant->type,trim($tmp[1]));
+		$variant->text = trim($tmp[2]);
+		debug($tmp[1]."  |  ".$tmp[2]."\n");
 	}
-	parse_variant_type(&$str,$variant);
+	else
+		$variant->text = trim($str);
 }
 // -------------------------------------------------
-function parse_meaning_links(&$str, &$mm)
+function parse_meaning_links($str, &$mm)
 {
-	$str = str_replace("См.","см.",$str);
-	$links = explode("см.",$str);
-	// т.к. ссылки идут после первого 'см.'
-	// пропускаем первый элемент 
-	each($links); 
-	
-	// далее разбираем
-	while( list($key, $val) = each($links) )
+	$lstr = array();	
+	// lstr[0] - исходная строка
+	// lstr[1] - всё, что до ссылок
+	// lstr[2] - сcылки разделённые ','
+	// регистро-независимый поиск ( СМ. | см. | См. | сМ. )
+	debug("\nstring: $str\n");
+	if( preg_match("/^(.*)см\.(.*)$/i",$str,$lstr) )
 	{
-		$val = trim($val);
-		if(!$val)
-			continue;
-
-		// разбираем каждый links на отдельные части
-		// по признаку ','
-		$tmp = explode(",",$val);
-		while( list(,$lnk) = each($tmp) )
+		// Здесь неплохо бы проверять, что count($lstr) < 2
+		// иначе получается, что в тексте несколько 'см.'
+		$links=preg_split("/,/",$lstr[2]);
+		while( list($key, $val) = each($links) )
 		{
-			array_push(&$mm->links,trim($lnk));
-		}
+			$val = trim($val);
+			if( !$val ) 
+				continue;
 
-		// Удаляем link
-		$str = str_replace($val,"",$str);
-		$str = str_replace("см.","",$str);
+			array_push($mm->links,trim($val));
+			debug("link($key): $val\n");
+		}
+		
+		// удаляем все сслыки вместе с 'см.'
+		$str = $lstr[1];
 	}
+	
+	return $str;
 }
 // -------------------------------------------------
 function parse_meaning(&$str, &$mm)
 {
 	// Получаем определения
-	$def = explode(";",$str);
+	// они разделены символом ';'
+	$def = preg_split("/;/",$str);
+	debug("string: $str\n");
 	while( list($key, $val) = each($def) )
 	{
 		$val = trim($val);
+		debug("var[$key] $val\n");
 		if(!$val)
 			continue;
-			
-		$var = new Variant();
-		// сперва проходим по link-ам
-		// т.к. они удалятся
-		parse_meaning_links($val,$mm);
-
-		parse_variant($val,$var);
-		array_push($mm->variants,$var);
+		
+		// в вариантах могут встретится ссылки вида 'см. linkname'
+		// они тоже стоят после ';'
+		// поэтому сперва проходим по link-ам и удаляем их из исходной 
+		// строки складывая в отдельный массив (mm->links)
+		$val = parse_meaning_links($val,$mm);
+		if( $val!= '' )
+		{
+			$variant = new Variant();
+			parse_variant($val,$variant);
+			array_push($mm->variants,$variant);
+		}
 	}
+	debug("meaning variants: ".count($mm->variants)."\n");
+	debug("meaning links   : ".count($mm->links)."\n");
 }
 // -------------------------------------------------
 function parse_parts(&$str, &$part)
 {
 	// разбиваем по смыслам
-	$str = ereg_replace("[0-9]+>", "{}",$str); 
-	$defs = explode("{}",$str);
+	// это: 1> xxx 2> xxx и т.п.
+	$defs = preg_split("([1-9]{1,}\>)",$str);
+	debug("\nstring: $str\n");
 	while( list($key, $val) = each($defs) )
 	{
 		$val = trim($val);
+		debug("meaning($key): $val\n");
 		if(!$val)
 			continue;
-			
+
 		$meaning = new Meaning();
 		parse_meaning($val,$meaning);
-		array_push(&$part->meanings, $meaning);
+		array_push($part->meanings, $meaning);
 	}
+	debug("parts meanings: ".count($part->meanings)."\n");
 }
 // -------------------------------------------------
 function parse_article(&$str, &$doc)
 {
 	// разбиваем по частям речи
-	$str = ereg_replace("[0-9]+\.","{}",$str); 
-	$defs = explode("{}",$str);
+	// это по "цифрам с точкой" типа 1. xxx 2. xxx и т.п.
+	$defs = preg_split("([1-9]+\.)",$str);
+	debug("\nstring: $str\n");
 	while( list($key, $val) = each($defs) )
 	{
 		$val = trim($val);
-		if(!$val)
+		if( !$val )
 			continue;
-		
+
 		$part = new Part();
 
 		// проверка определена ли часть речи
+		// _v. | _n. | _a. и т.п.
 		// определение обязательно идёт в начале строки
-//			if( eregi("(^_.*$)",$val) )
-		if( eregi("(^_.*\.)",$val) )
+
+		$tmp = array();
+		// tmp[0] - исходная строка
+		// tmp[1] - часть речи
+		// tmp[2] - остальная строка
+		if( preg_match("/^(\_[a-z]{1,}\.) (.*)$/",$val,$tmp) )
 		{
-			list($type,$tmp)=parse_word($val," ");
-			if( $tmp )
-			{
-				global $types;
-				// проверка на существование части речи
-				// если нет, значит это указана не часть речи
-				// а тип варианта перевода и мы не должны 
-				// вырезать его из строки
-				if( isset($types[$type]) )
-				{
-					$part->type = $type;
-					$val = $tmp;
-				}
-			}
+			$part->type = trim($tmp[1]);
+			$val 		= trim($tmp[2]);
+			debug("\n".$part->type." | $val\n");
 		}
-//		else
-//			echo "<p>ТИП НЕ ОПРЕДЕЛЁН";
 
 		parse_parts($val,$part);
-		array_push(&$doc->parts,$part);
+		array_push($doc->parts,$part);
 	}
+
+	debug("doc parts: ".count($doc->parts)."\n");
 }
-// -------------------------------------------------
-function parse_word(&$str, $sep="  ")
+// -----------------------------------------------------------------------------
+function parse_word(&$str)
 {
-	// делит сроку по ПЕРВОМУ разделителю 
-	$pos = strpos($str,$sep);
-	if( !$pos )	
+	// делим строку по первым встретившимся ДВУМ пробелам
+	$defs = preg_split("/([\ ]{2})/",$str);
+	if( count($defs) < 2 )
 		return array(0,0);
-	
-	return array( substr($str,0,$pos), substr($str,$pos+1) );
+	debug("\n".$defs[0]."  |  ".$defs[1]."\n");
+	return $defs;
 }
-// -------------------------------------------------
-// -------------------------------------------------
-// -------------------------------------------------
-//	echo "<p align='center'>Разбираем файл <b>'$src'</b> </p>";
+// -----------------------------------------------------------------------------
+// =============================================================================
 	$fp = fopen($src,"r");
 	if( !$fp )
 	{
@@ -471,40 +484,41 @@ function parse_word(&$str, $sep="  ")
 	$fout = fopen("$src.xml","w");
 	if( !$fout )
 	{
-		echo "\n<p> Не удалось открыть файл '$src.xml' для записи";
+		echo "\n<p> Не удалось открыть файл '$src.xml' для записи\n";
 		exit;
 	}
 
 	fwrite($fout,"<?xml version=\"1.0\" encoding=\"koi8-r\" ?>\n");
-	fwrite($fout,"<dictionary name=\"$dictname\" >\n");
+	fwrite($fout,"<dictionary name=\"$dictname\" last_modify=\"$dictdate\">\n");
 
-//	echo "<p align='center'> =====================================";
-	while( $str=fgets($fp) )
+	$wcount=0;
+	while( $str=trim(fgets($fp)) )
 	{
-		$str = trim($str);
-		if(!$str)
+		if( !$str )
 			continue;
 			
-//		echo "<p align='center'> ---------------------";
-//		echo "<p><b>разбираем</b>: $str";
 		list($word,$article) = parse_word($str);
 		if(!$word)
 		{
-			echo "\n<p> Не удалось выделить СЛОВО из -> '$str'";
+			echo "\n<p> Не удалось выделить СЛОВО из -> '$str'\n";
 			continue;
 		}
-		else
-//			echo "<p>'<u><i>$word</u></i>'<p>";
 
+//		echo "\nword: $word\n";
+		$wcount++;
 		$doc = new Doc($word);		
 		parse_article($article, $doc);
 //		$doc->myPrint();
 		fwrite($fout,"\n"); 
-		fwrite($fout, $doc->toXML($tpl)); 
+		fwrite($fout, $doc->toXML());
 	}
 	fwrite($fout,"\n</dictionary>\n");
 
 	fclose($fp);
 	fclose($fout);
-// -------------------------------------------------
+	
+	echo "Обработано $wcount словарных статей.\n";
+	
+	exit(0);
+// =============================================================================
 ?>
