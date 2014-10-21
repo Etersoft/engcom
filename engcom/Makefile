@@ -11,7 +11,7 @@ all: ${DDST}
 ${DDST}: ${DICT}.header ${DSRC}
 	cp -f ${DSRC} ${DSRC}.old
 	cat ${DSRC}.old | sort > ${DSRC}
-	cat ${DICT}.header ${DSRC} | iconv -f utf8 -t koi8-r > ${DDST}
+	cat ${DICT}.header ${DSRC} | sed -e "s|—|-|g" | iconv -f utf8 -t koi8-r > ${DDST}
 
 .PHONY: clean distr
 clean:
