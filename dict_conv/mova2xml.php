@@ -6,7 +6,7 @@
 // -----------------------------------------------------
 $DEBUG=0;
 
-/*
+
 	if( $argc < 2 )
 	{
 		echo "\n\nНе задан входной файл! ";
@@ -14,8 +14,8 @@ $DEBUG=0;
 		exit();
 	}
 	$src = $argv[1];
-*/	
-	$src='EngCom.source';
+	
+	//$src='EngCom.source';
 	$dictname = $src;
 	if( isset($argv[2]) )
 		$dictname = $argv[2];
@@ -39,6 +39,8 @@ $types['_adv.'] = "adverb"; 	// наречие";
 $types['_n.']	= "noun"; 		// существительное";
 $types['_v.']	= "verb"; 		// глагол";
 $types['_mis.'] = "misuse"; 	// неправильное употребление";
+// undefined
+$types[''] = "";
 
 // перечень типов для вариантов перевода
 $variant_types['_полигр.']	= "typography"; 	// типографское дело";
@@ -62,20 +64,29 @@ require_once("fast_template.class.php");
 class Variant 
 {
 	var $text=""; 		// вариант
-	var $type=array(); 	// key из массива спец. символов
+	private $type=array(); 	// key из массива спец. символов
 	function Variant() 
 	{
+	}
+
+	function getType()
+	{
+		return $this->type;
+	}
+
+	function pushType($val)
+	{
+	    array_push($this->type, "$val.");
 	}
 
 	function myPrint() 
 	{
 		global $variant_types;
 		echo "$this->text ";
-		if( count($this->type) <= 1 )
-		{
-			if( isset($this->type[0]) )
-				echo $this->text." - type: ???";
-		}
+		if( empty($this->type) ) {
+			//echo " type: UNKNOWN"; //debug_print_backtrace(); die("\nERROR:empty type");
+		} else if( count($this->type) <= 1 )
+			echo " type: ".$this->type[0];
 		else
 		{
 			echo "type: ";
@@ -92,12 +103,15 @@ class Variant
 		if( $this->text=='' )
 			return array('','');
 
-		$text = htmlspecialchars($this->text);
+		$text = htmlspecialchars($this->text,ENT_COMPAT,'koi8-r');
+		if (empty($text)) die("htmlspecialchars problem");
 		$type = array();
 
 		// преобразуем типы
-		if( count($this->type) < 1 )
+		if( empty($this->type) )
 			$type = '';
+		else if( count($this->type)<=1 )
+			$type=$variant_types[$this->type[0]];
 		else
 		{
 			while( list($k1,$v1) = each($this->type) )
@@ -113,11 +127,10 @@ class Variant
 	}
 }
 // -------------------------------------------------------------------------------------------
-class Meaning 
+class Meaning
 {
-	var $variants 	= array(); // варианты
-	var $links 		= array();
-
+	var $variants = array(); // варианты
+	var $links = array();
 	function Meaning() 
 	{
 	}
@@ -125,18 +138,22 @@ class Meaning
 	function myPrint() 
 	{
 		echo "<ul><u>варианты:</u>";
+		reset($this->variants);
 		while( list($k1,$v1) = each($this->variants) )
 		{
 			echo "<li>";
 			$v1->myPrint();
 			echo "</li>";
 		}
+
 		echo "</ul><ul><u>links:</u>";
+		reset($this->links);
 		while( list($k1,$v1) = each($this->links) )
 		{
 		    echo "<li>$v1</li>";
 		}
 		echo "</ul>";
+
 	}
 
 	function varToXML()
@@ -212,21 +229,37 @@ class Meaning
 // -------------------------------------------------------------------------------------------
 class Part
 {
-	var $type = array();		// ключ в массиве типов
+	private $type = array();		// ключ в массиве типов
 	var $meanings = array(); 	// смыслы
 	function Part($type="") 
 	{
 		$this->type=$type;
 	}
 
-	function myPrint() 
+	function getType()
+	{
+		return $this->type;
+	}
+
+	function setType($type) {
+		if (empty($type))
+		    die("setType: empty type");
+		$this->type = $type;
+	}
+
+	function myPrint()
 	{
 		global $types;
-//		echo " type: ($this->type) "; echo $types[$this->type];
-		while( list($k1,$v1) = each($this->meanings) )
+		if ($this->type) {
+			echo " type: ($this->type) "; echo $types[$this->type];
+		} else
+			echo "Part: type is empty";
+
+		reset($this->meanings);
+		while( list($k1,$m1) = each($this->meanings) )
 		{
-//			echo "<p> смысл("; echo $k1+1; echo ")";
-			$v1->myPrint();
+			echo "<p> смысл("; echo $k1+1; echo ")";
+			$m1->myPrint();
 		}
 	}
 
@@ -239,17 +272,18 @@ class Part
 		$tpl->define(array(
 			'main'=>'meaning.tpl'
 		));
-		
-		while( list($k1,$v1) = each($this->meanings) )
+
+		reset($this->meanings);
+		while( list($k1,$m1) = each($this->meanings) )
 		{
-			debug("variants: ".count($v1->variants)."\n");
+			debug("variants: ".count($m1->variants)."\n");
 			$tpl->assign( array(
-				'VARIANTS'	=> $v1->varToXML(),
-				'LINKS'		=> $v1->linksToXML()
+				'VARIANTS'=> $m1->varToXML(),
+				'LINKS'=> $m1->linksToXML()
 			));
 
 			$tpl->parse('MAIN',".main");
-		}		
+		}
 
 		return $tpl->fetch('MAIN');
 	}
@@ -268,6 +302,8 @@ class Doc
 	function myPrint() 
 	{
 //		echo "<P>'<u><i>$this->word</u></i>'</P>";
+
+		reset($this->parts);
 		while( list($k1,$v1) = each($this->parts) )
 		{
 			echo "<p>"; echo $k1+1; echo ")";
@@ -290,24 +326,23 @@ class Doc
 		if( count($this->parts) )
 		{
 			reset($this->parts);
-			while( list($k1,$v1) = each($this->parts) )
+			while( list($k1,$p1) = each($this->parts) )
 			{
-				$type = '';
-			    if( is_array($v1->type) )
+				$type = $p1->getType();
+				if( is_array($type) )
 				{
-					// здесь надобы разобрать типы
+					// здесь надо бы разобрать типы
 					// пока берем первый
-					$type = $v1->type[0];
+					$type=$type[0];
 				}
-				else
-					$type = $v1->type;
+
 
 				if( isset($types[$type]) )
 					$type=$types[$type];
 
 				$tpl->assign( array(
 					'NAME' 		=> $type,
-					'MEANINGS' 	=> $v1->toXML()
+					'MEANINGS' 	=> $p1->toXML()
 				));
 
 				$tpl->parse('PARTS',".part");
@@ -340,7 +375,7 @@ function parse_variant(&$str, &$variant)
 	debug("\nstring: $str\n");
 	if( preg_match("/^(\_[^.]{1,}\.) (.*)$/",$str,$tmp) )
 	{
-		array_push($variant->type,trim($tmp[1]));
+		$variant->pushType(trim($tmp[1]));
 		$variant->text = trim($tmp[2]);
 		debug($tmp[1]."  |  ".$tmp[2]."\n");
 	}
@@ -451,9 +486,9 @@ function parse_article(&$str, &$doc)
 		// tmp[2] - остальная строка
 		if( preg_match("/^(\_[a-z]{1,}\.) (.*)$/",$val,$tmp) )
 		{
-			$part->type = trim($tmp[1]);
+			$part->setType(trim($tmp[1]));
 			$val 		= trim($tmp[2]);
-			debug("\n".$part->type." | $val\n");
+			debug("\n".$part->getType()." | $val\n");
 		}
 
 		parse_parts($val,$part);
@@ -506,9 +541,10 @@ function parse_word(&$str)
 
 //		echo "\nword: $word\n";
 		$wcount++;
-		$doc = new Doc($word);		
+		$doc = new Doc($word);
 		parse_article($article, $doc);
-//		$doc->myPrint();
+		echo "\n\n";
+		$doc->myPrint();
 		fwrite($fout,"\n"); 
 		fwrite($fout, $doc->toXML());
 	}
