@@ -39,7 +39,7 @@ class SMTP
      *  SMTP server port
      *  @var int
      */
-    var $SMTP_PORT = 25;
+    var $SMTP_PORT = 587;
     
     /**
      *  SMTP reply line ending

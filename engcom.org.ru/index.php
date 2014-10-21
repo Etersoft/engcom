@@ -17,7 +17,8 @@
 	require_once('includes/dictionary.class.php');
 	require_once('includes/dictionary.php');
 	require_once('language/russian.php');
-	require_once('includes/phpmailer/class.phpmailer.php');
+//	require_once('includes/phpmailer/class.phpmailer.php');
+	require_once('includes/phpmailer/mmail.php');
 	
 	$database 	= new database( $dbhost, $dbuser, $dbpass, $dbname, $dbprefix, $dbcharset );
 	$task		= mosGetParam( $_REQUEST, 'task', '' );
@@ -67,4 +68,8 @@
 	}
 ?>
 </body>
+<script type="text/javascript">
+document.getElementById('id_word').focus();
+document.getElementById('id_word').select();
+</script>
 </html>

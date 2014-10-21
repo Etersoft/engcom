@@ -1,6 +1,6 @@
 <?php
 // --------------------------------------------------------------------------
-// $Id: dictionary.html.php,v 1.6 2007/10/14 09:36:29 pv Exp $
+// $Id: dictionary.html.php,v 1.7 2007/10/14 10:00:09 pv Exp $
 // --------------------------------------------------------------------------
 defined( '_ACCESS' ) or die( 'Direct Access to this location is not allowed.' );
 
@@ -29,7 +29,7 @@ function refIndex( $params='' )
 
 function viewSearchForm($word='',$mid=0)
 {
-	global $dictionary_name,$dictionary_version,$dictionary_items,$config_live_site,$dictionary_wiki,$dictionary_date,$dictionary_download;
+	global $dictionary_name,$dictionary_version,$dictionary_items,$config_live_site,$dictionary_wiki,$dictionary_date,$dictionary_download,$dictionary_pkgdownload;
 	$list[] = mosHTML::makeOption( '0', _DICT_SEARCH_WORD );
 	$list[] = mosHTML::makeOption( '1', _DICT_SEARCH_ALL );
 	$methods = mosHTML::selectList( $list, "search_method", "title='"._DICT_SEARCH_METHOD."' class='inputbox' size='1' ",'value', 'text', $mid);
@@ -38,15 +38,16 @@ function viewSearchForm($word='',$mid=0)
 <h1 class="contentheading"><?php echo $dictionary_name; ?></h1>
 <p><b>Версия от</b>&nbsp;<?php echo $dictionary_date; ?>
 &nbsp;&nbsp;<b>Словарных статей:</b> <?php echo $dictionary_items; ?>
-&nbsp;&nbsp;<b>Описание:</b> <a href="<?php echo $config_live_site;?>/content/view/30/63/">О проекте</a>
-&nbsp;&nbsp;<b>Загрузить:</b> <a href="<?php echo $dictionary_download; ?>">engcom-current.tar.bz2</a>
+&nbsp;&nbsp;<b>Описание:</b> <a href="http://wiki.etersoft.ru/EngCom">О проекте</a>
+&nbsp;&nbsp;<b>Исходный код:</b> <a href="<?php echo $dictionary_download; ?>">engcom.git</a>
+<!--&nbsp;&nbsp;<b>Формат словарей:</b> <a href="<?php echo $dictionary_pkgdownload; ?>">engcom.rpm</a>-->
 </p><p><b>Замечания и предложения:</b> <a href="<?php echo $dictionary_wiki; ?>/TODO"><?php echo $dictionary_wiki;?>/TODO</a>
 </p>
 <p>&nbsp;</p>
 <p><?php echo _DICT_SEARCH_METHOD."&nbsp;&nbsp;:"; echo $methods; ?>
   <input type='hidden' name='option' value='com_dictionary'>
   <input type='hidden' name='task' value='search'>
-  <input type='text' class='inputbox' name='word' size=20 value="<?php echo $word; ?>">
+  <input id=id_word type='text' class='inputbox' name='word' size=20 value="<?php echo $word; ?>">
   <input type='submit' class='button' value="<?php echo _DICT_SEARCH;?>">
 </form>
 
@@ -79,8 +80,8 @@ function showResult(&$rows, $word, $method=0)
 	global $dictionary_edit,$dictionary_wiki,$config_live_site,$dictionary_index;
 
 	HTML_dictionary::viewSearchForm($word,$method);
-	echo "<p> "; 
-//	if( strlen($word) > 1 )
+	echo "<p> ";
+	if( isset($word[0]) )
 	echo HTML_dictionary::showABCLine($word[0]);
 	
 	$numrows = count($rows);
@@ -118,7 +119,8 @@ function showResult(&$rows, $word, $method=0)
 		} 
 
 		// делаем слово ссылкой
-		$row->article = preg_replace("/>[^<]{0,1}($row->word)/i","<a href='$config_live_site/$row->word'>\\1</a>", $row->article);
+		$wd = str_replace('/', '.', $row->word );
+		$row->article = preg_replace("/>[^<]{0,1}($wd)/i","<a href='$config_live_site/$row->word'>\\1</a>", $row->article);
 
 		// Преобразуем ссылки на другие слова
 		$row->article = preg_replace("/{link:([^\}]{1,})}/i","<a href='$config_live_site/\\1'>\\1</a>",$row->article);
@@ -157,18 +159,18 @@ function editForm($row)
 {
 ?>
 <br><a href="<?php echo HTML_dictionary::refIndex(); ?>">Вернуться к словарю</a>
-<form action='<?php echo HTML_dictionary::refIndex(); ?>' method='post' name='dict_form'>
+<form action='<?php echo HTML_dictionary::refIndex(); ?>' method='post' name='dictForm'>
 
 	<script language="javascript" type="text/javascript">
 		function mysubmit()
 		{
-			var f = document.dict_form;
-			var e 	= /[\w\.\-]+@[\w\.\-]{2,}[\.\w]{0,4}/i;
+			var f = document.dictForm;
+			var e = /[\w\.\-]+@[\w\.\-]{2,}[\.\w]{0,4}/i;
 
 			if( f.w_email.value == "" || !e.test(f.w_email.value) ) {
 				alert("Некорректный адрес электронной почты");
-			else if( if( f.w_e.value != f.w_email.value ) {
-				alert("Не совпадат адреса электронной почты");
+			} else if( f.w_e.value != f.w_email.value ) {
+				alert("Не совпадают адреса электронной почты");
 			} else {
 				f.submit();
 			}
@@ -230,7 +232,7 @@ function editForm($row)
 <tr><th colspan="2">&nbsp;</th></tr>
 
 <tr><td colspan='2' align='left'>
-	<input type='button' name='submit' class='button' onclick="javascript:mysubmit()" value='Отослать' />
+	<input type='button' class='button' onclick="javascript:mysubmit()" value='Отослать' />
 	<input type='hidden' name='task' value='save' />
 	<input type='hidden' name='word' value="<?php echo $row->word; ?>" />
 </td></tr>

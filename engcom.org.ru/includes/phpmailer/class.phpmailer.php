@@ -45,7 +45,7 @@ class mosPHPMailer
      * Sets the CharSet of the message.
      * @var string
      */
-    var $CharSet           = "iso-8859-1";
+    var $CharSet           = "UTF-8";
 
     /**
      * Sets the Content-type of the message.
@@ -118,7 +118,7 @@ class mosPHPMailer
      * Method to send mail: ("mail", "sendmail", or "smtp").
      * @var string
      */
-    var $Mailer            = "mail";
+    var $Mailer            = "smtp";
 
     /**
      * Sets the path of the sendmail program.
@@ -165,13 +165,13 @@ class mosPHPMailer
      *  Hosts will be tried in order.
      *  @var string
      */
-    var $Host        = "localhost";
+    var $Host        = "mail.etersoft.ru";
 
     /**
      *  Sets the default SMTP server port.
      *  @var int
      */
-    var $Port        = 25;
+    var $Port        = 587;
 
     /**
      *  Sets the SMTP HELO of the message (Default is $Hostname).

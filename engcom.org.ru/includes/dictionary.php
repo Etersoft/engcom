@@ -1,5 +1,7 @@
 <?php
 	defined( '_ACCESS' ) or die( 'Direct Access to this location is not allowed.' );
+
+
 // ----------------------------------------------------------------------------------	
 function correct($token, $maxlen=50)
 {
@@ -151,7 +153,7 @@ function save($word)
 
 	if( $a_email != $a_email2 )
 	{
-		echo "<script> alert('Не совпадат адреса электронной почты!'); window.history.go(-1); </script>\n";
+		echo "<script> alert('Не совпадают адреса электронной почты!'); window.history.go(-1); </script>\n";
 		exit();
 	}
 
@@ -169,7 +171,7 @@ function save($word)
 
 	// безопасность
 	$word 		= substr($word,0,50);
-	$comm 		= substr($comm,0,255);
+	$comm 		= substr($comm,0,1024);
 	$word 		= addslashes(htmlspecialchars($word));
 	$var 		= addslashes(htmlspecialchars($var));
 	$new_word 	= addslashes(htmlspecialchars($new_word));
@@ -203,7 +205,7 @@ function save($word)
 	if( $a_email != '' )
 		$m_from	= $a_email;
 
-	if( !mosMail($m_from,'webmaster',$dictionary_email, $dictionary_subject, $message) )
+	if( !mosMail($m_from,'EngCom commiter',$dictionary_email, $dictionary_subject, $message) )
 	{
 		echo "<script> alert('Не удалось отослать ваш вариант! Если Вам не сложно попробуйте ещё раз позже'); window.history.go(-1); </script>\n";
 		exit();
