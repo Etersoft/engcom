@@ -153,6 +153,9 @@ cd -
 %_datadir/stardict/dic/*
 
 %changelog
+* Tue Oct 21 2014 Vitaly Lipatov <lav@altlinux.ru> 1.37-alt1
+- new version, about 2450 articles
+
 * Tue Dec 22 2009 Vitaly Lipatov <lav@altlinux.ru> 1.36-alt1
 - new version, build from git
 
