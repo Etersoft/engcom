@@ -39,6 +39,9 @@ class FastTemplate {
 									//	Unresolved vars in templates will
 									//	generate a warning when found.
 
+
+	var $NOERR		=	false;		// no print error
+
 //	************************************************************
 
 	function FastTemplate ($pathToTemplates = "")
@@ -172,9 +175,9 @@ class FastTemplate {
 	function show_unknowns ($Line)
 	{
 		$unknown = array();
-		if (ereg("(\{[A-Z0-9_]+\})",$Line,$unknown))
+		if (preg_match("(\{[A-Z0-9_]+\})",$Line,$unknown))
 		{
-			$UnkVar = $unknown[1];
+			$UnkVar = @$unknown[1];
 			if(!(empty($UnkVar)))
 			{
 				@error_log("[FastTemplate] Warning: no value found for variable: $UnkVar ",0);
@@ -197,7 +200,8 @@ class FastTemplate {
 					settype($val,"string");
 				}
 
-				$template = ereg_replace("\{".$key."\}","$val","$template");
+//				$template = ereg_replace("\{$key\}","$val","$template");
+				$template = preg_replace("/\{$key\}/",$val,$template);
 //				$template = str_replace("{$key}","$val","$template");
 			}
 		}
@@ -205,12 +209,12 @@ class FastTemplate {
 		if(!$this->STRICT)
 		{
 			// Silently remove anything not already found
-			$template = ereg_replace("(\{[A-Z0-9_]+\})","",$template);
+			$template = preg_replace("/(\{[A-Z0-9_]+\})/","",$template);
 		}
 		else
 		{
 			// Warn about unresolved template variables
-			if (ereg("(\{[A-Z0-9_]+\})",$template))
+			if (preg_match("(\{[A-Z0-9_]+\})",$template))
 			{
 				$unknown = split("\n",$template);
 				while (list ($Element,$Line) = each($unknown) )
@@ -726,15 +730,26 @@ class FastTemplate {
 	}
 
 //	************************************************************
+	function no_error()
+	{
+		$this->NOERR = true;
+	}
 
+	function yes_error()
+	{
+		$this->NOERR = false;
+	}
+//	************************************************************
 	function error ($errorMsg, $die = 0)
 	{
 		$this->ERROR = $errorMsg;
-		echo "ERROR: $this->ERROR <BR> \n";
+		if( !$this->NOERR )
+			echo "ERROR: $this->ERROR <BR> \n";
+		debug_print_backtrace();
+//		var_dump(debug_backtrace());
+
 		if ($die == 1)
-		{
 			exit;
-		}
 
 		return;
 
