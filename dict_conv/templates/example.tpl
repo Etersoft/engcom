@@ -1,0 +1,4 @@
+<example>
+	{TXT}
+	{LINKS}
+</example>

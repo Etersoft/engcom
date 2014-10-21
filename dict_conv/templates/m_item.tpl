@@ -1,0 +1,9 @@
+<variants>
+	{VARIANTS}
+</variants>
+<interfaces>	
+	{INTERFACES}
+</interfaces>	
+<links>
+	{LINKS}
+</links>

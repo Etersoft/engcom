@@ -1,0 +1,29 @@
+<article word="access" >
+<type name="verb" >
+<meaning>
+<variant type="" >обращаться</variant>
+</meaning>
+</type>
+<type name="noun" >
+<meaning>
+<variant type="" >доступ</variant>
+<variant type="" >обращение</variant>
+<variant type="" >операция чтения, записи или изменения чего-либо</variant>
+<variant type="" >direct memory access</variant>
+<variant type="" >access mode режим доступа -- например, набор параметров, определяющих права пользователя или группы пользователей на выполнение определённых операций (чтения, записи, изменения и пр.)</variant>
+<variant type="" >access time время доступа</variant>
+</meaning>
+</type>
+</article>
+
+
+noun             операция чтения, записи или изменения чего-либо
+--------
+en access
+ru доступ
+ru обращение
+
+
+см.
+direct memory access
+
