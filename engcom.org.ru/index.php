@@ -11,6 +11,7 @@
 	include_once('globals.php');
 	require_once('includes/miniMOS.php');
 	require_once('configuration.php');
+	require_once('dict_info.php');
 	require_once('includes/database.php');
 	require_once('includes/pageNavigation.php');
 	require_once('includes/dictionary.html.php');
