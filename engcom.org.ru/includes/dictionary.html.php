@@ -89,6 +89,21 @@ function showResult(&$rows, $word, $method=0)
 	{
 		echo "<P><b>'$word'</b>  "._DICT_NOTFOUND."</p>";
 
+		// FIXME: это copy paste!
+		// формируем меню (после раскраски, чтобы слова в меню не подсвечивались)
+		$dlnk = HTML_dictionary::refIndex("task=edit&word=$word");
+		$w_menu = '<ul style="padding-left: 5px;">';
+		$w_menu .="<li><a href=\"$dlnk\">Предложить</a></li>";
+		$w_menu .="<li><a href=\"$dwiki/$word\">Обсудить</a></li>";
+		$w_menu .= "</ul><hr style='padding-left: 10px; padding-right: 10px;' width='98%' align='center'><ul style='padding-left: 5px;'>";
+		$w_menu .="<li><a href=\"http://wikipedia.org/wiki/$word\">Wikipedia</a></li>";
+		$w_menu .="<li><a href=\"http://wiktionary.org/wiki/$word\">Wiktionary</a></li>";
+		$w_menu .="<li><a href=\"http://foldoc.org/?query=$word&action=Search\">FOLDOC</a></li>";
+		$w_menu .="<li><a href=\"http://www.onelook.com/cgi-bin/cgiwrap/bware/dofind.cgi?word=$word\">OneLook</a></li>";
+		$w_menu .= '</ul>';
+
+		echo "$w_menu\n";
+
 		if( $dictionary_edit )
 		{
 ?>

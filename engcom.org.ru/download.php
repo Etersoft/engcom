@@ -86,7 +86,7 @@
 //		saveConfig($option,0);		
 //		mosRedirect( "index2.php?option=$option", "Dictionary update complete (items: $dictionary_items)" );
 		echo "\n\nDictionary update complete (items: $dictionary_items)\n";
-		$date = date();
+		$date = date("r");
 		$data = "<?php
 	\$dictionary_date='$date';
 	\$dictionary_items='$dictionary_items';
